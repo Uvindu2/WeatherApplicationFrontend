@@ -1,0 +1,180 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.map{
+  display: flex;
+row-gap: 2rem;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap
+}
+.title {
+text-align: left;
+font-style: italic;
+color: black; 
+padding: 20px; 
+margin-bottom: 0; 
+
+}
+
+.app-container{
+background-image: url('/public/back2.jpg'); 
+background-size: cover;
+background-position: center;
+min-height: 100vh;
+/* background-position: center 5000%; */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+
+.flexCenter {
+display: flex;
+row-gap: 2rem;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+}
+
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+
+.innerWidth {
+width: 85%;
+}
+
+.flexColCenter {
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+}
+.flexColStart {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+}
+
+.h-wrapper{
+background: black;
+color: white;
+
+}
+.h-container{
+justify-content: space-between;
+padding: 1rem;
+padding-bottom: 1 rem;
+color: var(--secondary);
+}
+.h-menu{
+gap: 2rem;
+}
+.h-menu>*:hover{
+cursor: pointer;
+color: #F2B236;
+}
+.button{
+font-weight: 500 ;
+padding: 0.6rem 1.4rem;
+color: black;
+background: #F2B236;
+border: none;
+border-radius: 0.6rem;
+transition: all 300ms ease-in;
+}
+.button:hover{
+cursor:pointer;
+transform: scale(1.1);
+color: black;
+}
+
+.App {
+text-align: center;
+}
+
+.highest-lowest-container {
+display: flex;
+justify-content: space-between;
+margin-top: 10px;
+padding-bottom: 90px;
+}
+
+.highest-lowest-card {
+width: 240px;
+height: 260px; 
+background-color: rgba(255, 255, 255, 0);
+border-radius: 10px;
+padding: 20px;
+text-align: center;
+box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05); /* Adjust the shadow values */
+margin-right: 20px;
+}
+
+.temperature {
+font-size: 32px;
+font-weight: bold;
+color: black;
+}
+
+.district-name {
+margin-top: 10px;
+font-size: 18px;
+color: black;
+}
+
+.district-image {
+max-width: 160px; 
+height: auto;
+margin-top: 20px;
+}
+
+.district-images {
+max-width: 160px; 
+height: auto;
+margin-top: 7px;
+}
+
+.large-header {
+font-size: 6rem; 
+}
