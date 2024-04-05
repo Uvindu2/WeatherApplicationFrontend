@@ -4,14 +4,10 @@ import {
     TileLayer,
     Marker,
     Popup,
-    
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import axios from 'axios';
-
-
-// import './weather.css'
 
 const center = [7.926252474659472, 80.62546784024994];
 
@@ -45,113 +41,78 @@ const districtPositions = [
 
 const WeatherMap = () => {
     const [weatherData, setWeatherData] = useState([]);
-    
+    const [maxTemperature, setMaxTemperature] = useState(null);
+    const [minTemperature, setMinTemperature] = useState(null);
+    const [maxTempDistrict, setMaxTempDistrict] = useState(null);
+    const [minTempDistrict, setMinTempDistrict] = useState(null);
 
     useEffect(() => {
-        axios.get('https://api.maptiler.com/data/7a2e8f44-16af-429b-b62c-c3332ffba33f/features.json?key=vIkXdioF5LVFcmvw5yTi')
-            .then(response => {
-              //  setGeoJSONData(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching GeoJSON data:', error);
-            });
-
         fetchWeatherData();
-        const interval = setInterval(fetchWeatherData, 120000);
+        const interval = setInterval(fetchWeatherData,1000);
         return () => clearInterval(interval);
     }, []);
 
     const fetchWeatherData = () => {
         axios.get('http://localhost:4000/api/weather/')
             .then(response => {
-               //console.log(reesponse)
                 setWeatherData(response.data);
-
-                
+                updateTemperatureData(response.data);
             })
             .catch(error => {
                 console.error('Error fetching weather data:', error);
             });
     };
 
-    
+    const updateTemperatureData = (data) => {
+        if (data.length === 0) return;
+
+        let maxTemp = data[0].temperature;
+        let minTemp = data[0].temperature;
+        let maxTempDist = data[0].district;
+        let minTempDist = data[0].district;
+
+        data.forEach(({ temperature, district }) => {
+            if (temperature > maxTemp) {
+                maxTemp = temperature;
+                maxTempDist = district;
+            }
+            if (temperature < minTemp) {
+                minTemp = temperature;
+                minTempDist = district;
+            }
+        });
+
+        setMaxTemperature(maxTemp);
+        setMinTemperature(minTemp);
+        setMaxTempDistrict(maxTempDist);
+        setMinTempDistrict(minTempDist);
+    };
+
     const customIcon = L.icon({
-        iconUrl: '/marker.png', // Replace this with the actual path to your PNG icon
-        iconSize: [40, 40], // Adjust the size if needed
-        iconAnchor: [20, 40], // Adjust the anchor point if needed
+        iconUrl: '/marker.png',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
     });
-    
-    
-    
-  
-
-    const highlightFeature = (e) => {
-        const layer = e.target;
-        layer.setStyle({
-            fillColor: 'darkgreen',
-            fillOpacity: 0.7,
-        });
-    };
-
-    const resetHighlight = (e) => {
-        const layer = e.target;
-        layer.setStyle({
-            fillColor: 'green',
-            fillOpacity: 0.5,
-        });
-    };
-
-    const onEachFeature = (feature, layer) => {
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlight,
-        });
-    };
-
-
-
-  
 
     return (
-        <section>
-            
+        <section style={{ display: 'flex' }}>
+            <MapContainer
+                center={center}
+                zoom={8}
+                style={{ width: '75vw', height: '90vh' }}
+                dragging={true}
+                scrollWheelZoom={true}
+                zoomControl={true}
+            >
+                <TileLayer
+                    url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=vIkXdioF5LVFcmvw5yTi"
+                    attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+                />
 
-                <MapContainer
-                    center={center}
-                    zoom={8}
-                    style={{ width: '50vw', height: '90vh' }}
-                    dragging={true}
-                    scrollWheelZoom={true}
-                    zoomControl={true}
-                >
-                    <TileLayer
-                        url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=vIkXdioF5LVFcmvw5yTi"
-                        attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-                    />
-
-                    
-
-                    {districtPositions.map(({ name, position }) => {
-                        const weatherInfo = weatherData.find(item => item.district === name);
-                        const weatherCondition = weatherInfo ? weatherInfo.weatherCondition : '';
-
-                        //const customIcon = getWeatherIcon(weatherCondition);
-
-                        return (
-                            <Marker
-                            key={name}
-                            position={position}
-                            icon={customIcon} 
-                             // Pass the custom icon object here
-                            // eventHandlers={{
-                            //     mouseover: (e) => {
-                            //         e.target.openPopup();
-                            //     },
-                            //     mouseout: (e) => {
-                            //         e.target.closePopup();
-                            //     },
-                            // }}
-                        >
+                {districtPositions.map(({ name, position }) => {
+                    const weatherInfo = weatherData.find(item => item.district === name);
+                    return (
+                        <Marker key={name} position={position} icon={customIcon}>
                             <Popup>
                                 <h3>{name}</h3>
                                 {weatherInfo && (
@@ -163,22 +124,28 @@ const WeatherMap = () => {
                                 )}
                             </Popup>
                         </Marker>
-                        
-                        );
-                    })}
+                    );
+                })}
+            </MapContainer>
 
-
-
-
-
-                </MapContainer>
-
-
-
-
-           
+            <section style={{ flex: '1', padding: '20px', textAlign: 'center' }}>
+                <div style={{ backgroundColor: 'green', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', maxWidth: '300px', margin: '0 auto' }}>
+                    <h2 style={{ marginBottom: '20px', color: 'white' }}>Temperature Summary</h2>
+                    <table style={{ width: '100%', color: 'white' }}>
+                        <tbody>
+                            <tr>
+                                <td>{maxTempDistrict}</td>
+                                <td>{maxTemperature}°C (Max)</td>
+                            </tr>
+                            <tr>
+                                <td>{minTempDistrict}</td>
+                                <td>{minTemperature}°C (Min)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </section>
-
     );
 };
 
