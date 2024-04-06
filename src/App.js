@@ -54,7 +54,7 @@ const WeatherMap = () => {
 
     const fetchWeatherData = () => {
         // axios.get('http://localhost:4000/api/weather/')
-            axios.get('https://https://weathermapbe.onrender.com/api/weather/')
+            axios.get('https://weathermapbe.onrender.com/api/weather/')
             .then(response => {
                 setWeatherData(response.data);
                 updateTemperatureData(response.data);
