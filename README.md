@@ -9,5 +9,5 @@ Github link : https://github.com/Uvindu2/WeatherApplicationFrontend.git
 Deployment detaiils : 
 url : https://weathermapfe.onrender.com/
 
-local run :
+local :
 localhost:3000/
