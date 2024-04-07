@@ -48,7 +48,7 @@ const WeatherMap = () => {
 
     useEffect(() => {
         fetchWeatherData();
-        const interval = setInterval(fetchWeatherData,1000);
+        const interval = setInterval(fetchWeatherData, 300000);
         return () => clearInterval(interval);
     }, []);
 
